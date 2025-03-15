@@ -1,29 +1,22 @@
 // this is a question at Bilkent CS473 Algorithms Course, midweek exam question3 (40 points)
 
+#include <iostream>
 #include <vector>
+#include <cstdlib>  // For rand() and srand()
+#include <ctime>    // For seeding random generator
+#include <cmath>  // Include this for sqrt
 
 // given an array of perfect square, find the elements appearing exactly sqrt(n) times.
+using namespace std;
 
-vector<int> func(vector <int>& nums){
-    int n = nums.size();
-    int sqrt = sqrt(n);
-    vector<int> desired;
-    for(int i = 0; i < sqrt; i++){
-        int val1 = findFirstOccurence(nums,i * sqrt);
-        int val2 = findLastOccurence(nums,i * sqrt);
-        if(val2-val1+1 == sqrt){
-            desired.push_back(nums[i * sqrt]);
-        }
-    }
-    return desired;
-} 
+
 // returns the index of the first occurence of the element with the given index
 // log_sqrt (n)
 int findFirstOccurence(vector<int>& nums, int index){
     int element = nums[index];
-    int sqrt = sqrt(nums.size());
+    int sqrt_n = sqrt(nums.size());
    
-    int start = index - sqrt;
+    int start = index - sqrt_n;
     if(start < 0){ // *
         start = 0;
     }
@@ -46,16 +39,16 @@ int findFirstOccurence(vector<int>& nums, int index){
 // log_sqrt (n)
 int findLastOccurence(vector<int>& nums, int index){
     int element = nums[index];
-    int sqrt = sqrt(nums.size());
+    int sqrt_n = sqrt(nums.size());
    
     int start = index;
-    int end = index - sqrt;
+    int end = index + sqrt_n;
 
     int last_occurence = index;
     while(start <= end){
         int i = (start + end) / 2;
         if(nums[i] == element) {// if the beginning is on the left side
-            start = i+1
+            start = i+1;
             last_occurence = i;
         }
         else{
@@ -65,7 +58,41 @@ int findLastOccurence(vector<int>& nums, int index){
     return last_occurence;
 }
 
+vector<int> func(vector <int>& nums){
+    int n = nums.size();
+    int sqrt_n = sqrt(n);
+    vector<int> desired;
+    for(int i = 0; i < sqrt_n; i++){
+        int val1 = findFirstOccurence(nums,i * sqrt_n);
+        int val2 = findLastOccurence(nums,i * sqrt_n);
+        if(val2-val1+1 == sqrt_n){
+            desired.push_back(nums[i * sqrt_n]);
+        }
+        //cout << nums[i * sqrt_n] << "val2:" << val2 << endl;
+        //cout << nums[i * sqrt_n] << "val1:" << val1 << endl;
+    }
+    return desired;
+} 
 
-int main(){
+int main() {
+    vector<int> randomVec = {2,2,2,2,3,3,4,4,4,6,9,9,9,9,14,19};
+
+    vector<int> randomVec2 = {2,2,2,2,3,3,4,4,4,6,9,9,9,14,19,20,20,20,20,20,21,21,21,21,21,};
+
+    // Print first 10 elfor verification
+    cout << "First 10 elements of the random vector: ";
+    for (int i = 0; i < randomVec.size(); i++) {
+        cout << randomVec[i] << " ";
+    }
+    cout << endl;
     
+    cout << "sqrt-Repeated elements of the random vector: ";
+    vector<int> nums = func(randomVec);
+    for (int i = 0; i < nums.size(); i++) {
+        cout << nums[i] << " ";
+    }
+    cout << endl;
+
+    return 0;
 }
+
